@@ -65,9 +65,27 @@ const handleGetUserProfile = async (req, res) => {
     } })
 }
 
+const handleAdminPermission = async (req, res) => {
+    if(!req.user) {
+        return res.status(404).json({ status: 'failed', message: 'User must be logged in' });
+    }
+    const { id } = req.user;
+    try {
+        const userToUpdate = await User.findById(id);
+        userToUpdate.role = 'admin';
+        await userToUpdate.save();
+        const token = generateToken({ id: userToUpdate._id.toString() , role: 'admin' });
+        return res.status(200).json({ status: 'success', message: 'User is an admin now', token: token });
+    } catch(err) {
+        return res.status(500).json({ status: 'failed', message: 'Internal server error' });
+    }
+    
+}
+
 
 module.exports = {
     handleUserSignup,
     handleUserSignin,
     handleGetUserProfile,
+    handleAdminPermission,
 }
