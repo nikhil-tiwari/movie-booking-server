@@ -30,10 +30,10 @@ const handleCreateMovieSchedule = async (req, res) => {
         return res.status(404).json({ status: 'Faied', message: 'Theatre not found' });
     }
     try {
-        const newMovieSchedule = MovieSchedule.create({ theatreID, movieID, startTime, pricing, language });
+        const newMovieSchedule = await MovieSchedule.create({ theatreID, movieID, startTime, pricing, language });
         return res.status(201).json({ status: 'Success', message: 'Movie schedule created', data: newMovieSchedule })
-    } catch {
-        if (error.code === 11000) { // Duplicate key error
+    } catch(error) {
+        if (error.code === 11000) { 
             return res.status(400).json({ status: 'Failed', message: 'Schedule conflict: a movie is already scheduled at this time in this theatre' });
         }
         return res.status(500).json({ status: 'Failed', message: 'Internal Server Error' });
