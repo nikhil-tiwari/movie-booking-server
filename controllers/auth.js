@@ -3,8 +3,10 @@ const { validateUserSignup, validateUserSignIn, generateHash, generateToken } = 
 const crypto = require('crypto');
 
 const handleUserSignup = async (req, res) => {
+    console.log(req.body);
     const safeParse = validateUserSignup(req.body);
     if (safeParse.error) {
+        console.log(safeParse.error.errors);
         return res.status(400).json({ status: 'error', error: safeParse.error });
     }
     const { firstName, lastName, email, password, location: { city, lat = null, long = null } } = safeParse.data;
