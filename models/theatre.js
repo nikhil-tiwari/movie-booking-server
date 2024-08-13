@@ -20,6 +20,10 @@ const theatreSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'user',
         required: true,
+    },
+    movieListed: {
+        type: [String],
+        ref: 'movie',
     }
 }, { timestamps: true });
 
